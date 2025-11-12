@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EggBites</title>
+    <link rel="icon" type="image/png" href="../static/images/eggbites_logo.png">
+    <link rel="stylesheet" href="../static/css/style.css">
+
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <!-- NavBar -->
+    <nav>
+        <div class="logo">
+            <a href="../index.html#top"><img src="../static/images/eggbites_logo.png" alt="Eggcellent Logo">EggBites.</a>
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <ion-icon name="menu-outline"></ion-icon>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="../index.html#top">Home</a>
+            <div class="dropdown">
+                <a href="menu.html#menu" class="dropdown-toggle">Menu <ion-icon name="chevron-down-outline"></ion-icon></a>
+                <div class="dropdown-menu">
+                    <a href="menu.html#breakfast">Breakfast Classics</a>
+                    <a href="menu.html#benedicts">Eggs Benedict</a>
+                    <a href="menu.html#omelettes">Omelettes</a>
+                    <a href="menu.html#specialty">Specialty Dishes</a>
+                </div>
+            </div>
+            <a href="contact.html#contact">Contact Us</a>
+            <div class="icons"><ion-icon name="cart-outline"></ion-icon></div>
+            <a href="login.html#top">Login</a>
+        </div>
+    </nav>
+
+    <!-- Menu -->
+    <section class="menu-section" id="menu">
+        <h3 class="menu-subtitle">OUR MENU</h3>
+        <h2 class="menu-title" id="breakfast">Breakfast Classics</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/sunnysideup.jpg" alt="Sunny Side Up">
+                <h3>Sunny Side Up</h3>
+                <p class="price">₱95.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/scrambledegg.jpg" alt="Fluffy Scrambled Eggs">
+                <h3>Fluffy Scrambled Eggs</h3>
+                <p class="price">₱110.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/burito.jpg" alt="Breakfast Burrito">
+                <h3>Breakfast Burrito</h3>
+                <p class="price">₱145.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/huevos.jpg" alt="Huevos Rancheros">
+                <h3>Huevos Rancheros</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/breakfast-sammich.webp" alt="Breakfast Sandwich">
+                <h3>Breakfast Sandwich</h3>
+                <p class="price">₱125.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/eggtoast.jpg" alt="Egg in Toast">
+                <h3>Egg in Toast</h3>
+                <p class="price">₱100.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/breakplatter.webp" alt="Breakfast Platter">
+                <h3>Breakfast Platter</h3>
+                <p class="price">₱165.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/baconegg.jpeg" alt="Egg & Bacon Bowl">
+                <h3>Egg & Bacon Bowl</h3>
+                <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Eggs Benedict -->
+        <h2 class="menu-title specialty-title" id="benedicts">Eggs Benedict</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Classic-Eggs-Benedict-with-Hollandaise-Sauce.jpg" alt="Classic Benedict">
+                <h3>Classic Benedict</h3>
+                <p class="price">₱175.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Eggs-Florentine.jpg" alt="Florentine Benedict">
+                <h3>Florentine Benedict</h3>
+                <p class="price">₱165.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Smoked-Salmon-Eggs-Benedict-recipe.jpg" alt="Salmon Benedict">
+                <h3>Salmon Benedict</h3>
+                <p class="price">₱195.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/AVOCADO EGG.webp" alt="Avocado Benedict">
+                <h3>Avocado Benedict</h3>
+                <p class="price">₱160.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/crab-cake-benedict-featured.jpg" alt="Crab Cake Benedict">
+                <h3>Crab Cake Benedict</h3>
+                <p class="price">₱205.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Mushroom-eggs-benedict.jpg" alt="Mushroom Benedict">
+                <h3>Mushroom Benedict</h3>
+                <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Vegan-Eggs-Benedict-7.jpg" alt="Veggie Benedict">
+                <h3>Veggie Benedict</h3>
+                <p class="price">₱150.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/royal.jpg" alt="Benedict Royale">
+                <h3>Benedict Royale</h3>
+                <p class="price">₱215.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Omelettes -->
+        <h2 class="menu-title specialty-title" id="omelettes">Omelettes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Cheese_Omelette.png" alt="Cheese Omelette">
+                <h3>Cheese Omelette</h3>
+                <p class="price">₱125.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Denver-omelet.jpg" alt="Denver Omelette">
+                <h3>Denver Omelette</h3>
+                <p class="price">₱145.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Spanish+omelette.webp" alt="Spanish Omelette">
+                <h3>Spanish Omelette</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/veggie-omelette-featured.webp" alt="Veggie Omelette">
+                <h3>Veggie Omelette</h3>
+                <p class="price">₱130.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Mexican_Omelette.jpg" alt="Mexican Omelette">
+                <h3>Mexican Omelette</h3>
+                <p class="price">₱150.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/greekome.jpg" alt="Greek Omelette">
+                <h3>Greek Omelette</h3>
+                <p class="price">₱140.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/western-omelette-recipe-3.jpg" alt="Western Omelette">
+                <h3>Western Omelette</h3>
+                <p class="price">₱145.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/farmers.jpg" alt="Farmer's Omelette">
+                <h3>Farmer's Omelette</h3>
+                <p class="price">₱155.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Specialty -->
+        <h2 class="menu-title specialty-title" id="specialty">Specialty Dishes</h2>
+
+        <div class="menu-container">
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Shakshuka.webp" alt="Shakshuka">
+                <h3>Shakshuka</h3>
+                <p class="price">₱175.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/vegetable-frittata-.jpeg" alt="Frittata">
+                <h3>Frittata</h3>
+                <p class="price">₱165.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/quiche.jpg" alt="Quiche Lorraine">
+                <h3>Quiche Lorraine</h3>
+                <p class="price">₱185.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/friedrice.jpg" alt="Egg Fried Rice">
+                <h3>Egg Fried Rice</h3>
+                <p class="price">₱135.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Pasta-Carbonara-square.webp" alt="Carbonara">
+                <h3>Carbonara</h3>
+                <p class="price">₱195.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/egg-drop-soup-5.jpg" alt="Egg Drop Soup">
+                <h3>Egg Drop Soup</h3>
+                <p class="price">₱120.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Classic-Egg-Salad-featurex.jpg" alt="Egg Salad Sandwich">
+                <h3>Egg Salad Sandwich</h3>
+                <p class="price">₱125.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+
+            <div class="menu-card">
+                <img src="../static/images/menu-items/Deviled-Eggs.jpg" alt="Deviled Eggs">
+                <h3>Deviled Eggs</h3>
+                <p class="price">₱115.00</p>
+                <button class="add-btn">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col brand">
+                <h2>Eggcellent<span>.</span></h2>
+                <p>We will fill your tummy with delicious egg dishes with fast delivery.</p>
+                <div class="footer-socials">
+                    <a href="https://facebook.com/"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="https://instagram.com/"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="https://twitter.com/"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="https://google.com/"><ion-icon name="logo-google"></ion-icon></a>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h3>Our Menu</h3>
+                <ul>
+                    <li><a href="../index.html#special">Special</a></li>
+                    <li><a href="../index.html#popular">Popular</a></li>
+                    <li><a href="menu.html#menu">Category</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="../index.html#services">Why EggBites</a></li>
+                    <li><a href="footer.html#partner">Partner With Us</a></li>
+                    <li><a href="footer.html#about">About Us</a></li>
+                    <li><a href="footer.html#faq">FAQs</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Support</h3>
+                <ul>
+                    <li><a href="login.html">Account</a></li>
+                    <li><a href="contact.html#contact">Support Center</a></li>
+                    <li><a href="../index.html#reviews">Feedback</a></li>
+                    <li><a href="contact.html#contact">Contacts</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 Eggcellent. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="../static/js/script.js"></script>
+</body>
+</html>
