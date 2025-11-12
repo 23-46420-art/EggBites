@@ -989,7 +989,7 @@ function viewCart() {
                     margin-bottom: 30px;
                     font-size: 1rem;
                 ">
-                    Add some delicious dimsum to get started!
+                    Add some delicious egg to get started!
                 </p>
                 <button onclick="closeCart()" style="
                     background: #f8af1e; 
