@@ -1,5 +1,5 @@
 # 🍜 Ordering System
-A simple web-based ordering system for an authentic Asian dim sum restaurant. Built with **HTML** and **CSS** for the frontend and **JavaScript** for functionality. The system does **not include a backend server**—all data is managed locally using **browser local storage**.
+A simple web-based ordering system for an authentic Egg Dishes restaurant. Built with **HTML** and **CSS** for the frontend and **JavaScript** for functionality. The system does **not include a backend server**—all data is managed locally using **browser local storage**.
 
 # ✨ Features
 - Browse menu items by category 
