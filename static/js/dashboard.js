@@ -189,7 +189,7 @@ function normalizeOrdersForDashboard() {
             if (resolved && resolved !== 'Unknown') {
                 if (updated.paymentMethodName !== resolved) { updated.paymentMethodName = resolved; changed = true; }
                 if (!updated.paymentMethod || updated.paymentMethod !== resolved) { updated.paymentMethod = resolved; changed = true; }
-                const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                const nameToId = { 'Cash on Delivery': 'cod' };
                 const id = nameToId[resolved] || (typeof updated.paymentMethodId === 'string' ? updated.paymentMethodId : null);
                 if (id && updated.paymentMethodId !== id) { updated.paymentMethodId = id; changed = true; }
             } else if (updated.paymentMethodId && typeof updated.paymentMethodId === 'object') {
@@ -200,7 +200,7 @@ function normalizeOrdersForDashboard() {
                     if (fix && fix !== 'Unknown') {
                         updated.paymentMethodName = fix;
                         updated.paymentMethod = fix;
-                        const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                        const nameToId = { 'Cash on Delivery': 'cod' };
                         updated.paymentMethodId = nameToId[fix] || String(maybe);
                         changed = true;
                     }
@@ -217,13 +217,10 @@ function normalizeOrdersForDashboard() {
     }
 }
 
-
 // Resolve payment method label robustly for display (admin/staff helper)
 function resolvePaymentLabel(order) {
-    // Always try to return one of the canonical display names when possible:
-    // 'GCash', 'Maya', 'PayPal'. Accepts strings, objects, different casings
-    // and infers from substrings.
-    if (!order) return 'Unknown';
+    // Always return 'Cash on Delivery' for all orders
+    if (!order) return 'Cash on Delivery';
 
     const asString = (val) => {
         if (val === null || val === undefined) return '';
@@ -251,19 +248,13 @@ function resolvePaymentLabel(order) {
     ].join(' ').toLowerCase();
 
     const norm = candidates.replace(/[^a-z0-9]/g, '');
-    if (norm.includes('gcash')) return 'GCash';
-    if (norm.includes('paymaya') || norm.includes('maya')) return 'Maya';
-    if (norm.includes('paypal')) return 'PayPal';
+    if (norm.includes('cash') || norm.includes('delivery') || norm.includes('cod')) return 'Cash on Delivery';
 
-    // Final direct checks (in case a friendly name exists but didn't include tokens)
     const direct = (asString(order.paymentMethodName) || asString(order.paymentMethod) || asString(order.paymentMethodId) || '').trim().toLowerCase();
-    if (direct === 'gcash') return 'GCash';
-    if (direct === 'maya' || direct === 'paymaya') return 'Maya';
-    if (direct === 'paypal') return 'PayPal';
+    if (direct === 'cod' || direct === 'cashondelivery' || direct === 'cash on delivery') return 'Cash on Delivery';
 
-    return 'Unknown';
+    return 'Cash on Delivery'; // Default to Cash on Delivery
 }
-
 
 function loadRecentOrders() {
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
@@ -281,13 +272,12 @@ function loadRecentOrders() {
         return;
     }
     
-    // Map payment method for display
-    const methodMap = { gcash: 'GCash', maya: 'Maya', paypal: 'PayPal' };
     ordersList.innerHTML = recentOrders.map(order => {
         const orderDate = new Date(order.date);
         const statusColor = getStatusColor(order.status);
-    // Resolve payment method name using helper
-    let paymentMethod = resolvePaymentLabel(order);
+        // All orders are Cash on Delivery
+        const paymentMethod = 'Cash on Delivery';
+        
         return `
             <div class="order-card">
                 <div class="order-header">
@@ -301,7 +291,7 @@ function loadRecentOrders() {
                 </div>
                 <div class="order-details">
                     <p><ion-icon name="location-outline"></ion-icon> ${order.address.city}, ${order.address.state}</p>
-                    <p><ion-icon name="card-outline"></ion-icon> ${paymentMethod}</p>
+                    <p><ion-icon name="cash-outline"></ion-icon> ${paymentMethod}</p>
                     <p><strong style="color: #f8af1e;">Total: ₱${order.total.toFixed(2)}</strong></p>
                 </div>
             </div>
@@ -410,7 +400,7 @@ function filterOrders(status) {
                         <p><ion-icon name="person-outline"></ion-icon> ${order.address.name}</p>
                         <p><ion-icon name="location-outline"></ion-icon> ${order.address.address}, ${order.address.city}, ${order.address.state} ${order.address.zipCode}</p>
                         <p><ion-icon name="call-outline"></ion-icon> ${order.address.phone}</p>
-                        <p><ion-icon name="card-outline"></ion-icon> ${resolvePaymentLabel(order)}</p>
+                        <p><ion-icon name="cash-outline"></ion-icon> Cash on Delivery</p>
                     </div>
                     <div class="order-total">
                         <h3 style="color: #f8af1e; font-size: 1.5rem;">₱${order.total.toFixed(2)}</h3>
