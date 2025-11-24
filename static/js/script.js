@@ -633,11 +633,6 @@ function showOrderStatus() {
             const orderDate = new Date(order.date);
             const statusColor = order.status === 'Delivered' ? '#22c55e' : 
                                order.status === 'Shipping' ? '#3b82f6' : '#f8af1e';
-            // Determine payment method display (use helper)
-            const methodIconMap = { gcash: 'wallet-outline', maya: 'phone-portrait-outline', paypal: 'logo-paypal' };
-            const methodId = order.paymentMethodId || null;
-            const methodLabel = resolvePaymentLabel(order);
-            const methodIcon = methodIconMap[methodId] || 'card-outline';
             
             orderHTML += `
                 <div style="
@@ -671,8 +666,8 @@ function showOrderStatus() {
                             ${orderDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </p>
                         <p style="color: rgba(255,255,255,0.7); margin: 5px 0; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
-                            <ion-icon name="${methodIcon}" style="vertical-align: middle;"></ion-icon>
-                            ${methodLabel}
+                            <ion-icon name="cash-outline" style="vertical-align: middle;"></ion-icon>
+                            Cash on Delivery
                         </p>
                         <p style="color: rgba(255,255,255,0.7); margin: 5px 0; font-size: 0.9rem;">
                             <ion-icon name="location-outline" style="vertical-align: middle;"></ion-icon>
@@ -1626,9 +1621,9 @@ function deleteAddress(index, silent = false) {
 }
 
 function completeCheckout(address, total) {
-    // Close shipping form and show payment options
+    // Close shipping form and proceed directly to order confirmation
     closeShippingForm();
-    showPaymentOptions(address, total);
+    confirmCashOnDelivery(address, total);
 }
 
 // Shipping fee helper (fixed)
@@ -1636,247 +1631,8 @@ function getShippingFee() {
     return 30.00; 
 }
 
-function showPaymentOptions(address, total) {
-    const paymentMethods = [
-        { id: 'gcash', name: 'GCash', icon: 'wallet-outline' },
-        { id: 'maya', name: 'Maya', icon: 'phone-portrait-outline' },
-        { id: 'paypal', name: 'PayPal', icon: 'logo-paypal' }
-    ];
-    
-    let paymentHTML = `
-        <div class="shipping-address-form" style="color: black; backdrop-filter: blur(20px); max-height: 90vh; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #f8af1e;">
-                <h2 style="
-                    color: #f8af1e; 
-                    margin: 0;
-                    font-size: 2rem;
-                    font-weight: 700;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                ">
-                    <ion-icon name="card-outline" style="font-size: 2rem;"></ion-icon>
-                    Select Payment Method
-                </h2>
-                <button onclick="closePaymentForm()" style="
-                    background: transparent;
-                    border: none;
-                    color: #f8af1e;
-                    font-size: 2rem;
-                    cursor: pointer;
-                    padding: 0;
-                    width: 35px;
-                    height: 35px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: transform 0.2s;
-                " onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
-                    <ion-icon name="close-outline"></ion-icon>
-                </button>
-            </div>
-            
-            <div style="flex: 1; overflow-y: auto; padding-right: 8px; margin-right: -8px;">
-                <div style="margin-bottom: 24px;">
-                    <div style="background: rgba(248, 175, 30, 0.1); padding: 20px; border-radius: 12px; border: 1px solid rgba(248, 175, 30, 0.3);">
-                            <h3 style="color: #f8af1e; margin: 0 0 10px 0; font-size: 1.3rem;">Order Summary</h3>
-                            <p style="color: white; margin: 5px 0; font-size: 1.1rem;">
-                                <strong>Subtotal:</strong> <span style="color: #f8af1e; font-size: 1.2rem; font-weight: 700;">₱${total.toFixed(2)}</span>
-                            </p>
-                            <p style="color: white; margin: 5px 0; font-size: 1.1rem;">
-                                <strong>Shipping Fee:</strong> <span style="color: #f8af1e; font-size: 1.2rem; font-weight: 700;">₱${getShippingFee().toFixed(2)}</span>
-                            </p>
-                            <p style="color: white; margin: 8px 0 5px 0; font-size: 1.15rem;">
-                                <strong>Total Amount:</strong> <span style="color: #f8af1e; font-size: 1.5rem; font-weight: 700;">₱${(total + getShippingFee()).toFixed(2)}</span>
-                            </p>
-                            <p style="color: rgba(255,255,255,0.7); margin: 5px 0; font-size: 0.9rem;">
-                                <ion-icon name="location-outline" style="vertical-align: middle;"></ion-icon>
-                                Shipping to: ${address.address}, ${address.city}, ${address.state}
-                            </p>
-                        </div>
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <h3 style="color: white; margin-bottom: 16px; font-size: 1.2rem;">Choose Your Payment Method</h3>
-                    <div style="display: grid; gap: 12px;">
-    `;
-    
-    paymentMethods.forEach(method => {
-        paymentHTML += `
-            <div id="payment-${method.id}" class="payment-option" data-method-id="${method.id}" data-method-name="${method.name}"
-                 style="
-                background: rgba(255, 255, 255, 0.05);
-                padding: 18px;
-                border-radius: 12px;
-                border: 2px solid rgba(255, 255, 255, 0.1);
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            " 
-            onmouseover="if(!this.classList.contains('selected')) {this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(248,175,30,0.5)';}" 
-            onmouseout="if(!this.classList.contains('selected')) {this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.1)';}">
-                <div style="
-                    background: #f8af1e;
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-shrink: 0;
-                ">
-                    <ion-icon name="${method.icon}" style="font-size: 1.6rem; color: #000;"></ion-icon>
-                </div>
-                <div style="flex: 1; min-width: 0;">
-                    <h4 style="color: white; margin: 0 0 4px 0; font-size: 1.1rem;">${method.name}</h4>
-                    <p style="color: rgba(255,255,255,0.6); margin: 0; font-size: 0.82rem;">Pay securely with ${method.name}</p>
-                </div>
-                <ion-icon name="checkmark-circle" class="payment-check-icon" style="font-size: 1.8rem; color: #f8af1e; display: none; flex-shrink: 0;"></ion-icon>
-            </div>
-        `;
-    });
-    
-    paymentHTML += `
-                    </div>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-                <button id="confirmPaymentBtn" onclick="confirmPayment(${total}, ${JSON.stringify(address).replace(/"/g, '&quot;')})" 
-                    style="
-                    background: #f8af1e;
-                    color: #000;
-                    border: none;
-                    padding: 14px 24px;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    font-weight: 700;
-                    font-size: 1rem;
-                    flex: 1;
-                    opacity: 0.5;
-                    pointer-events: none;
-                    transition: all 0.3s ease;
-                " disabled>
-                    <ion-icon name="checkmark-circle-outline" style="vertical-align: middle; font-size: 1.2rem; margin-right: 6px;"></ion-icon>
-                    Confirm Payment
-                </button>
-                <button onclick="closePaymentForm()" style="
-                    background: rgba(255,255,255,0.1);
-                    color: white;
-                    border: 1px solid rgba(255,255,255,0.2);
-                    padding: 14px 24px;
-                    border-radius: 10px;
-                    cursor: pointer;
-                    font-weight: 600;
-                    font-size: 1rem;
-                    min-width: 100px;
-                " onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-                    Cancel
-                </button>
-            </div>
-        </div>
-    `;
-    
-    // Create modal
-    const modal = document.createElement('div');
-    modal.id = 'paymentModal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.92);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow-y: auto;
-        padding: 20px 0;
-    `;
-    modal.innerHTML = paymentHTML;
-    
-    // Close modal when clicking outside
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closePaymentForm();
-        }
-    });
-    
-    document.body.appendChild(modal);
-    
-    // Add click listeners to payment options after a short delay to ensure DOM is ready
-    setTimeout(() => {
-        document.querySelectorAll('.payment-option').forEach(option => {
-            option.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const methodId = this.getAttribute('data-method-id');
-                const methodName = this.getAttribute('data-method-name');
-                console.log('Selected payment:', methodId, methodName);
-                highlightPaymentMethod(methodId, methodName);
-            });
-        });
-    }, 100);
-}
-
-let selectedPaymentMethod = null;
-let selectedPaymentName = null;
-
-function highlightPaymentMethod(methodId, methodName) {
-    console.log('highlightPaymentMethod called with:', methodId, methodName);
-    
-    // Remove selection from all payment methods
-    document.querySelectorAll('[id^="payment-"]').forEach(el => {
-        el.classList.remove('selected');
-        el.style.background = 'rgba(255, 255, 255, 0.05)';
-        el.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-        const checkIcon = el.querySelector('.payment-check-icon');
-        if (checkIcon) checkIcon.style.display = 'none';
-    });
-    
-    // Highlight selected payment method
-    const selectedElement = document.getElementById(`payment-${methodId}`);
-    if (selectedElement) {
-        selectedElement.classList.add('selected');
-        selectedElement.style.background = 'rgba(248, 175, 30, 0.15)';
-        selectedElement.style.borderColor = '#f8af1e';
-        const checkIcon = selectedElement.querySelector('.payment-check-icon');
-        if (checkIcon) checkIcon.style.display = 'block';
-    }
-    
-    // Store selected method
-    selectedPaymentMethod = methodId;
-    selectedPaymentName = methodName;
-    console.log('Stored payment method:', selectedPaymentMethod, selectedPaymentName);
-    
-    // Enable confirm button
-    const confirmBtn = document.getElementById('confirmPaymentBtn');
-    if (confirmBtn) {
-        confirmBtn.style.opacity = '1';
-        confirmBtn.style.pointerEvents = 'auto';
-        confirmBtn.disabled = false;
-        confirmBtn.onmouseover = function() { this.style.background = '#e48a0a'; };
-        confirmBtn.onmouseout = function() { this.style.background = '#f8af1e'; };
-    }
-}
-
-function confirmPayment(total, address) {
-    console.log('confirmPayment called. selectedPaymentMethod:', selectedPaymentMethod, 'selectedPaymentName:', selectedPaymentName);
-    
-    if (!selectedPaymentMethod || !selectedPaymentName) {
-        showAlert('error', 'Please select a payment method first.');
-        return;
-    }
-    
-    // Capture selected payment before closing the modal (closePaymentForm resets the globals)
-    const paymentMethodIdToSave = selectedPaymentMethod;
-    const paymentMethodNameToSave = selectedPaymentName;
-
-    // Process payment
-    closePaymentForm();
-
+// Direct Cash on Delivery confirmation
+function confirmCashOnDelivery(address, total) {
     // Capture cart items before clearing so we can persist them on the order
     const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -1893,11 +1649,9 @@ function confirmPayment(total, address) {
         subtotal: parseFloat(total.toFixed(2)),
         shippingFee: shippingFee,
         address: address,
-    // Save both ID and display name for robustness
-    paymentMethodId: paymentMethodIdToSave,
-    paymentMethodName: paymentMethodNameToSave,
-    // Keep legacy field for backward compatibility in any other views
-    paymentMethod: paymentMethodNameToSave,
+        paymentMethodId: 'cod',
+        paymentMethodName: 'Cash on Delivery',
+        paymentMethod: 'Cash on Delivery',
         status: 'Processing',
         // Persist the ordered items so admin/staff can review them
         items: cartItems
@@ -1908,23 +1662,7 @@ function confirmPayment(total, address) {
     localStorage.setItem('cart', JSON.stringify([]));
     updateCartBadge();
     
-    // Use resolved friendly name to avoid 'via null' or raw ids
-    const displayPayment = resolvePaymentLabel({ paymentMethodName: paymentMethodNameToSave, paymentMethod: paymentMethodNameToSave, paymentMethodId: paymentMethodIdToSave }) || paymentMethodNameToSave || 'selected payment method';
-    showAlert('success', `Payment successful via ${displayPayment}! Subtotal: ₱${total.toFixed(2)}, Shipping: ₱${shippingFee.toFixed(2)}, Total: ₱${finalTotal.toFixed(2)} - Order is being processed.`);
-    
-    // Reset selected payment
-    selectedPaymentMethod = null;
-    selectedPaymentName = null;
-}
-
-function closePaymentForm() {
-    const modal = document.getElementById('paymentModal');
-    if (modal) {
-        modal.remove();
-    }
-    // Reset selected payment
-    selectedPaymentMethod = null;
-    selectedPaymentName = null;
+    showAlert('success', `Order placed successfully! Total: ₱${finalTotal.toFixed(2)} (Cash on Delivery). Your order is being processed.`);
 }
 
 function closeShippingForm() {
@@ -2258,7 +1996,7 @@ function normalizeExistingOrders() {
                     changed = true;
                 }
                 // Map friendly name back to canonical id
-                const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                const nameToId = { 'Cash on Delivery': 'cod' };
                 const id = nameToId[resolved] || (typeof updated.paymentMethodId === 'string' ? updated.paymentMethodId : null);
                 if (id && updated.paymentMethodId !== id) {
                     updated.paymentMethodId = id;
@@ -2273,7 +2011,7 @@ function normalizeExistingOrders() {
                         if (fix && fix !== 'Unknown') {
                             updated.paymentMethodName = fix;
                             updated.paymentMethod = fix;
-                            const nameToId = { 'GCash': 'gcash', 'Maya': 'maya', 'PayPal': 'paypal' };
+                            const nameToId = { 'Cash on Delivery': 'cod' };
                             updated.paymentMethodId = nameToId[fix] || String(maybeId);
                             changed = true;
                         }
@@ -2293,7 +2031,7 @@ function normalizeExistingOrders() {
 
 // Resolve payment method label robustly for display (customer-side helper)
 function resolvePaymentLabel(order) {
-    // Always try to infer one of the canonical names: 'GCash', 'Maya', 'PayPal'.
+    // Always try to infer one of the canonical names: 'Cash on Delivery'.
     if (!order) return 'Unknown';
 
     const asString = (val) => {
@@ -2322,16 +2060,12 @@ function resolvePaymentLabel(order) {
     ].join(' ').toLowerCase();
 
     const norm = candidates.replace(/[^a-z0-9]/g, '');
-    if (norm.includes('gcash')) return 'GCash';
-    if (norm.includes('paymaya') || norm.includes('maya')) return 'Maya';
-    if (norm.includes('paypal')) return 'PayPal';
+    if (norm.includes('cash') || norm.includes('delivery') || norm.includes('cod')) return 'Cash on Delivery';
 
     const direct = (asString(order.paymentMethodName) || asString(order.paymentMethod) || asString(order.paymentMethodId) || '').trim().toLowerCase();
-    if (direct === 'gcash') return 'GCash';
-    if (direct === 'maya' || direct === 'paymaya') return 'Maya';
-    if (direct === 'paypal') return 'PayPal';
+    if (direct === 'cod' || direct === 'cashondelivery' || direct === 'cash on delivery') return 'Cash on Delivery';
 
-    return 'Unknown';
+    return 'Cash on Delivery'; // Default to Cash on Delivery
 }
 
 // Confirm received: move order from 'orders' into 'purchaseHistory'
