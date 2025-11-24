@@ -2496,7 +2496,7 @@ nav {
     margin: 32px auto !important;
     max-width: 700px;
     width: 95%;
-    background: rgba(28, 26, 22, 0.98); /* Beige background */
+    background: rgba(0, 0, 0, 0.98); /* Beige background */
     border-radius: 20px;
     border: 1px solid rgba(135, 206, 235, 0.3);
     box-shadow: 0 10px 40px rgba(135, 206, 235, 0.2);
